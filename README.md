@@ -16,7 +16,7 @@ A React application with Express backend that displays your last 100 songs liste
 
 ## Features
 
-- 🎵 View your last 100 played tracks from Spotify
+- 🎵 View your last 50 played tracks from Spotify
 - 🔗 Click any song to open it in Spotify
 - 📱 Responsive design
 - 🔐 Secure Spotify OAuth integration

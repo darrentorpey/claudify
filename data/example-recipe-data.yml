@@ -1,0 +1,45 @@
+title: "Mountain Dorito Mojito (V1)"
+source_url: "https://htdapp.com/drinks/1693"
+version: 1
+method: "stirred"
+abv: 9.43 # %
+ingredients:
+  - amount: "2 oz"
+    item: "Doritos Nacho Cheese Vodka"
+  - amount: "0.25 oz"
+    item: "Simple Syrup"
+  - amount: "0.50 oz"
+    item: "Lime Juice"
+  - amount: "4 oz"
+    item: "Mountain Dew"
+  - amount: "Handful"
+    item: "Mint Leaves"
+process: |-
+  1. Build in glass
+  2. Add 0.5 oz Lime Juice
+  3. Add handful of Mint Leaves and muddle
+  4. Add ice
+  5. Add 2 oz Doritos Nacho Cheese Vodka
+  6. Add 4 oz Mountain Dew
+  7. Add 0.25 oz Simple Syrup
+  8. Stir
+  9. Garnish with a Mint Sprig
+notes: >-
+  "Greg says it's 'pretty good,' 'minty,' 'trying to be refreshing,' but also
+  'weird,' 'salty,' and 'smoky,' with a 'cheesiness of the aftertaste' that he
+  doesn't like. He calls it 'a cocktail with an identity crisis.'"
+  Origin: A Mojito riff with Doritos Nacho Cheese Vodka, Mountain Dew, lime,
+  mint, and simple syrup, created as an experiment in savory, minty cocktails.
+tags:
+  - Smokey
+  - Salty
+  - Refreshing
+  - Weird
+  - Mojito Variation
+episodes:
+  - title: "You can't handle this"
+    air_date: "2024-11-15"
+    url: "/episodes/563"
+status:
+  recipe: "needs review"
+  notes: "needs review"

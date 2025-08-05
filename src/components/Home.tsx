@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { SpotifyRecentTrack } from "../lib/spotify";
 import { trpc } from "../lib/trpc-client";
@@ -18,32 +19,100 @@ export default function HomeComponent() {
 			? localStorage.getItem("spotify_access_token")
 			: null,
 	);
+	const [refreshToken, setRefreshToken] = useState<string | null>(
+		typeof window !== "undefined"
+			? localStorage.getItem("spotify_refresh_token")
+			: null,
+	);
 
 	const authUrlQuery = trpc.getAuthUrl.useQuery();
 	const exchangeCodeMutation = trpc.exchangeCodeForToken.useMutation();
+	const refreshTokenMutation = trpc.refreshToken.useMutation();
 	const recentTracksQuery = trpc.getRecentTracks.useQuery(
-		{ accessToken: accessToken! },
+		{ accessToken: accessToken || "" },
 		{ enabled: !!accessToken },
 	);
 
 	useEffect(() => {
-		if (code && !accessToken) {
+		if (code && !accessToken && !exchangeCodeMutation.isPending) {
 			exchangeCodeMutation.mutate(
 				{ code },
 				{
-					onSuccess: (token) => {
-						setAccessToken(token);
-						localStorage.setItem("spotify_access_token", token);
+					onSuccess: (tokenResponse) => {
+						setAccessToken(tokenResponse.access_token);
+						localStorage.setItem(
+							"spotify_access_token",
+							tokenResponse.access_token,
+						);
+
+						if (tokenResponse.refresh_token) {
+							setRefreshToken(tokenResponse.refresh_token);
+							localStorage.setItem(
+								"spotify_refresh_token",
+								tokenResponse.refresh_token,
+							);
+						}
+
 						// Clear the code from URL
 						window.history.replaceState({}, document.title, "/");
+						setCode(null); // Clear the code state to prevent re-triggering
 					},
 					onError: (error) => {
 						console.error("Failed to exchange code:", error);
+						setCode(null); // Clear the code state even on error
 					},
 				},
 			);
 		}
 	}, [code, accessToken]);
+
+	// Handle token refresh on 401 errors
+	useEffect(() => {
+		if (
+			recentTracksQuery.error &&
+			refreshToken &&
+			!refreshTokenMutation.isPending
+		) {
+			const errorMessage = recentTracksQuery.error.message;
+			// Check if it's a 401 error (token expired) and we haven't already tried refreshing
+			if (
+				(errorMessage.includes("401") ||
+					errorMessage.includes("unauthorized")) &&
+				!refreshTokenMutation.isError
+			) {
+				console.log("🔄 Access token expired, attempting refresh...");
+				refreshTokenMutation.mutate(
+					{ refreshToken },
+					{
+						onSuccess: (newTokenResponse) => {
+							console.log("✅ Token refreshed successfully");
+							setAccessToken(newTokenResponse.access_token);
+							localStorage.setItem(
+								"spotify_access_token",
+								newTokenResponse.access_token,
+							);
+
+							if (newTokenResponse.refresh_token) {
+								setRefreshToken(newTokenResponse.refresh_token);
+								localStorage.setItem(
+									"spotify_refresh_token",
+									newTokenResponse.refresh_token,
+								);
+							}
+						},
+						onError: (error) => {
+							console.error("❌ Failed to refresh token:", error);
+							// Clear tokens and force re-authentication
+							localStorage.removeItem("spotify_access_token");
+							localStorage.removeItem("spotify_refresh_token");
+							setAccessToken(null);
+							setRefreshToken(null);
+						},
+					},
+				);
+			}
+		}
+	}, [recentTracksQuery.error, refreshToken]);
 
 	if (!accessToken) {
 		return (
@@ -91,9 +160,12 @@ export default function HomeComponent() {
 						Failed to load your listening history
 					</p>
 					<button
+						type="button"
 						onClick={() => {
 							localStorage.removeItem("spotify_access_token");
+							localStorage.removeItem("spotify_refresh_token");
 							setAccessToken(null);
+							setRefreshToken(null);
 						}}
 						className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
 					>
@@ -117,9 +189,12 @@ export default function HomeComponent() {
 						Your last {tracks.length} tracks from Spotify
 					</p>
 					<button
+						type="button"
 						onClick={() => {
 							localStorage.removeItem("spotify_access_token");
+							localStorage.removeItem("spotify_refresh_token");
 							setAccessToken(null);
+							setRefreshToken(null);
 						}}
 						className="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-sm"
 					>
@@ -155,21 +230,30 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 					/>
 				)}
 				<div className="flex-1 min-w-0">
-					<a
-						href={track.track.external_urls.spotify}
-						target="_blank"
-						rel="noopener noreferrer"
+					<Link
+						to="/song/$trackId"
+						params={{ trackId: track.track.id }}
 						className="text-lg font-semibold text-gray-900 hover:text-green-600 transition-colors truncate block"
 					>
 						{track.track.name}
-					</a>
+					</Link>
 					<p className="text-gray-600 truncate">
 						{track.track.artists.map((artist) => artist.name).join(", ")}
 					</p>
 					<p className="text-sm text-gray-500 truncate">
 						{track.track.album.name}
 					</p>
-					<p className="text-xs text-gray-400 mt-1">Played at {playedAt}</p>
+					<p className="text-xs text-gray-400 mt-1">
+						Played at {playedAt} •
+						<a
+							href={track.track.external_urls.spotify}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-green-600 hover:text-green-800 ml-1"
+						>
+							Open in Spotify
+						</a>
+					</p>
 				</div>
 				<div className="text-sm text-gray-500">
 					{Math.floor(track.track.duration_ms / 60000)}:

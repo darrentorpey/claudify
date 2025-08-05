@@ -18,13 +18,15 @@ export const appRouter = router({
 				return await spotifyAPI.getRecentTracks(input.accessToken);
 			} catch (error) {
 				console.error("🔥 Error fetching recent tracks:");
-				console.error("- Error message:", error.message);
+				console.error("- Error message:", (error as Error).message);
 				console.error("- Error details:", error);
 				console.error(
 					"- Access token (first 20 chars):",
 					`${input.accessToken.substring(0, 20)}...`,
 				);
-				throw new Error(`Failed to fetch recent tracks: ${error.message}`);
+				throw new Error(
+					`Failed to fetch recent tracks: ${(error as Error).message}`,
+				);
 			}
 		}),
 
@@ -35,7 +37,49 @@ export const appRouter = router({
 				return await spotifyAPI.getAccessToken(input.code);
 			} catch (error) {
 				console.error("🔥 Error exchanging code for token:", error);
-				throw new Error(`Failed to exchange code for token: ${error.message}`);
+				throw new Error(
+					`Failed to exchange code for token: ${(error as Error).message}`,
+				);
+			}
+		}),
+
+	refreshToken: publicProcedure
+		.input(z.object({ refreshToken: z.string() }))
+		.mutation(async ({ input }) => {
+			try {
+				return await spotifyAPI.refreshAccessToken(input.refreshToken);
+			} catch (error) {
+				console.error("🔥 Error refreshing token:", error);
+				throw new Error(`Failed to refresh token: ${(error as Error).message}`);
+			}
+		}),
+
+	getTrackHistory: publicProcedure
+		.input(
+			z.object({
+				accessToken: z.string(),
+				trackId: z.string(),
+			}),
+		)
+		.query(async ({ input }) => {
+			try {
+				console.log(
+					"🎵 Fetching track history for:",
+					input.trackId,
+					"with token:",
+					`${input.accessToken.substring(0, 20)}...`,
+				);
+				return await spotifyAPI.getTrackHistory(
+					input.accessToken,
+					input.trackId,
+				);
+			} catch (error) {
+				console.error("🔥 Error fetching track history:");
+				console.error("- Error message:", (error as Error).message);
+				console.error("- Error details:", error);
+				throw new Error(
+					`Failed to fetch track history: ${(error as Error).message}`,
+				);
 			}
 		}),
 });

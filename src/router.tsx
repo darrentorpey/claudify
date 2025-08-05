@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import HomeComponent from "./components/Home";
+import SongDetailComponent from "./components/SongDetail";
 
 const rootRoute = createRootRoute({
 	component: () => (
@@ -22,7 +23,13 @@ const indexRoute = createRoute({
 	component: HomeComponent,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute]);
+const songDetailRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/song/$trackId",
+	component: SongDetailComponent,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, songDetailRoute]);
 
 export const router = createRouter({ routeTree });
 

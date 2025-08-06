@@ -50,11 +50,11 @@ export function ThemeController() {
 
 	return (
 		<div className="flex items-center gap-2">
-			<span className="text-sm text-text-secondary">Theme:</span>
+			<span className="text-sm text-secondary">Theme:</span>
 			<select
 				value={theme}
 				onChange={handleThemeChange}
-				className="rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 bg-bg-secondary border border-border-primary text-text-primary"
+				className="rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 bg-white border border-black text-black"
 			>
 				<option value="system">System</option>
 				<option value="light">Light</option>

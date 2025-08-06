@@ -1,137 +1,51 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: 249 250 251; /* gray-50 */
-  --color-bg-secondary: 255 255 255; /* white */
-  --color-bg-tertiary: 243 244 246; /* gray-100 */
-  --color-bg-hover: 229 231 235; /* gray-200 */
+  --color-white: white;
+  --color-black: black;
+  --color-primary: black;
+  --color-secondary: white;
+  --color-accent: gray;
+  --color-accent-primary: orange;
+  --color-error: red;
+  --color-border: gray;
+}
 
-  --color-text-primary: 17 24 39; /* gray-900 */
-  --color-text-secondary: 75 85 99; /* gray-600 */
-  --color-text-tertiary: 107 114 128; /* gray-500 */
-  --color-text-muted: 156 163 175; /* gray-400 */
-
-  --color-border-primary: 209 213 219; /* gray-300 */
-  --color-border-secondary: 229 231 235; /* gray-200 */
-
-  --color-accent-primary: 34 197 94; /* green-500 */
-  --color-accent-hover: 22 163 74; /* green-600 */
-  --color-accent-text: 255 255 255; /* white */
-
-  --color-error: 239 68 68; /* red-500 */
-  --color-error-hover: 220 38 38; /* red-600 */
-
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+/* Light theme (default) */
+:root,
+:root[data-theme="light"] {
+  --color-white: rgb(255 255 255); /* white */
+  --color-black: rgb(17 24 39); /* gray-900 */
+  --color-primary: rgb(17 24 39); /* gray-900 */
+  --color-secondary: rgb(75 85 99); /* gray-600 */
+  --color-accent: rgb(34 197 94); /* green-500 */
+  --color-accent-primary: rgb(130 215 196); /* Spotify green */
+  --color-error: rgb(239 68 68); /* red-500 */
+  --color-border: rgb(209 213 219); /* gray-300 */
 }
 
 /* Dark theme */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg-primary: 17 24 39; /* gray-900 */
-    --color-bg-secondary: 31 41 55; /* gray-800 */
-    --color-bg-tertiary: 55 65 81; /* gray-700 */
-    --color-bg-hover: 75 85 99; /* gray-600 */
-
-    --color-text-primary: 249 250 251; /* gray-50 */
-    --color-text-secondary: 209 213 219; /* gray-300 */
-    --color-text-tertiary: 156 163 175; /* gray-400 */
-    --color-text-muted: 107 114 128; /* gray-500 */
-
-    --color-border-primary: 75 85 99; /* gray-600 */
-    --color-border-secondary: 55 65 81; /* gray-700 */
-
-    --color-accent-primary: 34 197 94; /* green-500 */
-    --color-accent-hover: 22 163 74; /* green-600 */
-    --color-accent-text: 255 255 255; /* white */
-
-    --color-error: 248 113 113; /* red-400 */
-    --color-error-hover: 239 68 68; /* red-500 */
-
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-  }
-}
-
-/* Override for users who explicitly choose light theme */
-[data-theme="light"] {
-  --color-bg-primary: 249 250 251;
-  --color-bg-secondary: 255 255 255;
-  --color-bg-tertiary: 243 244 246;
-  --color-bg-hover: 229 231 235;
-
-  --color-text-primary: 17 24 39;
-  --color-text-secondary: 75 85 99;
-  --color-text-tertiary: 107 114 128;
-  --color-text-muted: 156 163 175;
-
-  --color-border-primary: 209 213 219;
-  --color-border-secondary: 229 231 235;
-
-  --color-accent-primary: 34 197 94;
-  --color-accent-hover: 22 163 74;
-  --color-accent-text: 255 255 255;
-
-  --color-error: 239 68 68;
-  --color-error-hover: 220 38 38;
-
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-}
-
-/* Override for users who explicitly choose dark theme */
-[data-theme="dark"] {
-  --color-bg-primary: 17 24 39;
-  --color-bg-secondary: 31 41 55;
-  --color-bg-tertiary: 55 65 81;
-  --color-bg-hover: 75 85 99;
-
-  --color-text-primary: 249 250 251;
-  --color-text-secondary: 209 213 219;
-  --color-text-tertiary: 156 163 175;
-  --color-text-muted: 107 114 128;
-
-  --color-border-primary: 75 85 99;
-  --color-border-secondary: 55 65 81;
-
-  --color-accent-primary: 34 197 94;
-  --color-accent-hover: 22 163 74;
-  --color-accent-text: 255 255 255;
-
-  --color-error: 248 113 113;
-  --color-error-hover: 239 68 68;
-
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-white: rgb(31 41 55); /* gray-800 */
+  --color-black: rgb(249 250 251); /* gray-50 */
+  --color-primary: rgb(249 250 251); /* gray-50 */
+  --color-secondary: rgb(209 213 219); /* gray-300 */
+  --color-accent: rgb(148, 169, 200);
+  --color-accent-primary: rgb(148, 169, 200);
+  --color-error: rgb(248 113 113); /* red-400 */
+  --color-border: rgb(75 85 99); /* gray-600 */
 }
 
 /* Spotify theme */
-[data-theme="spotify"] {
-  --color-bg-primary: 18 18 18;
-  --color-bg-secondary: 33 33 33;
-  --color-bg-tertiary: 64 64 64;
-  --color-bg-hover: 83 83 83;
-
-  --color-text-primary: 255 255 255;
-  --color-text-secondary: 179 179 179;
-  --color-text-tertiary: 163 163 163;
-  --color-text-muted: 117 117 117;
-
-  --color-border-primary: 83 83 83;
-  --color-border-secondary: 64 64 64;
-
-  --color-accent-primary: 30 215 96; /* Spotify green */
-  --color-accent-hover: 24 192 86;
-  --color-accent-text: 0 0 0;
-
-  --color-error: 248 113 113;
-  --color-error-hover: 239 68 68;
-
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.8);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.8), 0 2px 4px -2px rgb(0 0 0 / 0.8);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.8), 0 4px 6px -4px rgb(0 0 0 / 0.8);
+:root[data-theme="spotify"] {
+  color-scheme: dark;
+  --color-white: rgb(18 18 18); /* Spotify dark background */
+  --color-black: rgb(193, 193, 193); /* white text */
+  --color-primary: rgb(255 255 255); /* white text */
+  --color-secondary: rgb(179 179 179); /* readable gray text */
+  --color-accent: rgb(30 215 96); /* Spotify green */
+  --color-accent-primary: orange; /* Spotify green */
+  --color-error: rgb(248 113 113); /* red-400 */
+  --color-border: rgb(55 55 55); /* Spotify border gray */
 }

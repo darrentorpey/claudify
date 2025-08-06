@@ -117,26 +117,24 @@ export default function HomeComponent() {
 
 	if (!accessToken) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
-				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
-					<h1 className="text-3xl font-bold mb-6 text-text-primary">
+			<div className="min-h-screen flex items-center justify-center bg-white">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-white shadow-md">
+					<h1 className="text-3xl font-bold mb-6 text-primary">
 						Connect to Spotify
 					</h1>
-					<p className="mb-6 text-text-secondary">
+					<p className="mb-6 text-secondary">
 						Connect your Spotify account to view your last 50 listened tracks
 					</p>
 					{authUrlQuery.data && (
 						<a
 							href={authUrlQuery.data}
-							className="font-bold py-3 px-6 rounded-lg inline-block transition-opacity hover:opacity-80 bg-accent-primary text-accent-text"
+							className="font-bold py-3 px-6 rounded-lg inline-block transition-opacity hover:opacity-80 bg-accent text-white"
 						>
 							Connect Spotify
 						</a>
 					)}
 					{exchangeCodeMutation.isPending && (
-						<div className="mt-4 text-text-secondary">
-							Connecting...
-						</div>
+						<div className="mt-4 text-secondary">Connecting...</div>
 					)}
 				</div>
 			</div>
@@ -145,12 +143,10 @@ export default function HomeComponent() {
 
 	if (recentTracksQuery.isLoading) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+			<div className="min-h-screen flex items-center justify-center bg-white">
 				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-accent-primary mx-auto mb-4"></div>
-					<p className="text-text-secondary">
-						Loading your listening history...
-					</p>
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-accent mx-auto mb-4"></div>
+					<p className="text-secondary">Loading your listening history...</p>
 				</div>
 			</div>
 		);
@@ -158,10 +154,10 @@ export default function HomeComponent() {
 
 	if (recentTracksQuery.error) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
-				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+			<div className="min-h-screen flex items-center justify-center bg-white">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-white shadow-theme-md">
 					<h2 className="text-2xl font-bold mb-4 text-error">Error</h2>
-					<p className="mb-4 text-text-secondary">
+					<p className="mb-4 text-secondary">
 						Failed to load your listening history
 					</p>
 					<button
@@ -184,16 +180,16 @@ export default function HomeComponent() {
 	const tracks = recentTracksQuery.data || [];
 
 	return (
-		<div className="min-h-screen bg-bg-primary">
+		<div className="min-h-screen bg-white">
 			<div className="container mx-auto px-4 py-8">
-				<div className="rounded-lg p-6 px-4 mb-6 bg-bg-secondary shadow-theme-md">
+				<div className="rounded-lg p-6 px-4 mb-6 shadow-theme-md">
 					<div className="flex justify-between items-start">
-						<div>
-							<h1 className="text-3xl font-bold mb-2 text-text-primary">
+						<div className="text-primary">
+							<h1 className="text-3xl font-bold mb-2 text-current">
 								Your recent listening history
 							</h1>
 
-							<p className="text-text-secondary">
+							<p className="text-secondary">
 								Your last {tracks.length} tracks from Spotify
 							</p>
 						</div>
@@ -235,7 +231,7 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 	const playedAt = new Date(track.played_at).toLocaleString();
 
 	return (
-		<div className="rounded-lg p-4 transition-shadow hover:opacity-95 bg-bg-secondary shadow-theme-md border border-border-secondary">
+		<div className="rounded-lg p-4 transition-shadow hover:opacity-95 bg-white shadow-theme-md border border-accent">
 			<div className="flex items-center gap-4">
 				{albumImage && (
 					<img
@@ -248,17 +244,17 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 					<Link
 						to="/song/$trackId"
 						params={{ trackId: track.track.id }}
-						className="text-lg font-semibold transition-colors truncate block hover:opacity-80 text-text-primary"
+						className="text-lg font-semibold transition-colors truncate block hover:opacity-80 text-accent"
 					>
 						{track.track.name}
 					</Link>
-					<p className="truncate text-text-secondary">
+					<p className="truncate text-secondary">
 						{track.track.artists.map((artist) => artist.name).join(", ")}
 					</p>
-					<p className="text-sm truncate text-text-tertiary">
+					<p className="text-sm truncate text-primary">
 						{track.track.album.name}
 					</p>
-					<p className="text-xs mt-1 text-text-muted">
+					<p className="text-xs mt-1 text-secondary">
 						Played at {playedAt} •
 						<a
 							href={track.track.external_urls.spotify}
@@ -270,7 +266,7 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 						</a>
 					</p>
 				</div>
-				<div className="text-sm text-text-tertiary">
+				<div className="text-sm text-secondary">
 					{Math.floor(track.track.duration_ms / 60000)}:
 					{String(
 						Math.floor((track.track.duration_ms % 60000) / 1000),

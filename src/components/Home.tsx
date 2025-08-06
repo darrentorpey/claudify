@@ -52,7 +52,8 @@ export default function HomeComponent() {
 						);
 
 						// Calculate and store token expiry time (5 minutes before actual expiry for buffer)
-						const expiryTime = Date.now() + (tokenResponse.expires_in - 300) * 1000;
+						const expiryTime =
+							Date.now() + (tokenResponse.expires_in - 300) * 1000;
 						setTokenExpiry(expiryTime);
 						localStorage.setItem("spotify_token_expiry", expiryTime.toString());
 
@@ -104,9 +105,13 @@ export default function HomeComponent() {
 							);
 
 							// Update token expiry time (5 minutes before actual expiry for buffer)
-							const expiryTime = Date.now() + (newTokenResponse.expires_in - 300) * 1000;
+							const expiryTime =
+								Date.now() + (newTokenResponse.expires_in - 300) * 1000;
 							setTokenExpiry(expiryTime);
-							localStorage.setItem("spotify_token_expiry", expiryTime.toString());
+							localStorage.setItem(
+								"spotify_token_expiry",
+								expiryTime.toString(),
+							);
 
 							if (newTokenResponse.refresh_token) {
 								setRefreshToken(newTokenResponse.refresh_token);
@@ -130,7 +135,13 @@ export default function HomeComponent() {
 				);
 			}
 		}
-	}, [recentTracksQuery.error, refreshToken, refreshTokenMutation.isPending, refreshTokenMutation.isError, refreshTokenMutation.mutate]);
+	}, [
+		recentTracksQuery.error,
+		refreshToken,
+		refreshTokenMutation.isPending,
+		refreshTokenMutation.isError,
+		refreshTokenMutation.mutate,
+	]);
 
 	// Proactive token refresh - check expiry every 30 seconds
 	useEffect(() => {
@@ -153,9 +164,13 @@ export default function HomeComponent() {
 							);
 
 							// Update token expiry time (5 minutes before actual expiry for buffer)
-							const expiryTime = Date.now() + (newTokenResponse.expires_in - 300) * 1000;
+							const expiryTime =
+								Date.now() + (newTokenResponse.expires_in - 300) * 1000;
 							setTokenExpiry(expiryTime);
-							localStorage.setItem("spotify_token_expiry", expiryTime.toString());
+							localStorage.setItem(
+								"spotify_token_expiry",
+								expiryTime.toString(),
+							);
 
 							if (newTokenResponse.refresh_token) {
 								setRefreshToken(newTokenResponse.refresh_token);
@@ -181,7 +196,13 @@ export default function HomeComponent() {
 		const interval = setInterval(checkTokenExpiry, 30000);
 
 		return () => clearInterval(interval);
-	}, [accessToken, refreshToken, tokenExpiry, refreshTokenMutation.isPending, refreshTokenMutation.mutate]);
+	}, [
+		accessToken,
+		refreshToken,
+		tokenExpiry,
+		refreshTokenMutation.isPending,
+		refreshTokenMutation.mutate,
+	]);
 
 	if (!accessToken) {
 		return (

@@ -19,18 +19,18 @@ export default function SongDetailComponent() {
 
 	if (!accessToken) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-theme-bg-primary">
-				<div className="p-8 rounded-lg max-w-md w-full text-center bg-theme-bg-secondary shadow-theme-md">
-					<h2 className="text-2xl font-bold mb-4 text-theme-error">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-error">
 						Access Required
 					</h2>
-					<p className="mb-4 text-theme-text-secondary">
+					<p className="mb-4 text-text-secondary">
 						Please connect your Spotify account to view song details
 					</p>
 					<button
 						type="button"
 						onClick={() => navigate({ to: "/" })}
-						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-theme-accent-primary text-theme-accent-text"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-accent-primary text-accent-text"
 					>
 						Go Back Home
 					</button>
@@ -41,10 +41,10 @@ export default function SongDetailComponent() {
 
 	if (trackHistoryQuery.isLoading) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-theme-bg-primary">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
 				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-theme-accent-primary mx-auto mb-4"></div>
-					<p className="text-theme-text-secondary">Loading song history...</p>
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-accent-primary mx-auto mb-4"></div>
+					<p className="text-text-secondary">Loading song history...</p>
 				</div>
 			</div>
 		);
@@ -52,16 +52,16 @@ export default function SongDetailComponent() {
 
 	if (trackHistoryQuery.error) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-theme-bg-primary">
-				<div className="p-8 rounded-lg max-w-md w-full text-center bg-theme-bg-secondary shadow-theme-md">
-					<h2 className="text-2xl font-bold mb-4 text-theme-error">Error</h2>
-					<p className="mb-4 text-theme-text-secondary">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-error">Error</h2>
+					<p className="mb-4 text-text-secondary">
 						Failed to load song history
 					</p>
 					<button
 						type="button"
 						onClick={() => navigate({ to: "/" })}
-						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-theme-text-tertiary text-theme-bg-primary"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 					>
 						Go Back Home
 					</button>
@@ -75,18 +75,18 @@ export default function SongDetailComponent() {
 
 	if (!track) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-theme-bg-primary">
-				<div className="p-8 rounded-lg max-w-md w-full text-center bg-theme-bg-secondary shadow-theme-md">
-					<h2 className="text-2xl font-bold mb-4 text-theme-text-secondary">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-text-secondary">
 						No History Found
 					</h2>
-					<p className="mb-4 text-theme-text-secondary">
+					<p className="mb-4 text-text-secondary">
 						No listening history found for this song
 					</p>
 					<button
 						type="button"
 						onClick={() => navigate({ to: "/" })}
-						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-theme-text-tertiary text-theme-bg-primary"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 					>
 						Go Back Home
 					</button>
@@ -98,20 +98,20 @@ export default function SongDetailComponent() {
 	const albumImage = track.album.images?.[0]?.url;
 
 	return (
-		<div className="min-h-screen bg-theme-bg-primary">
+		<div className="min-h-screen bg-bg-primary">
 			<div className="container mx-auto px-4 py-8">
 				<div className="flex justify-between items-center mb-6">
 					<button
 						type="button"
 						onClick={() => navigate({ to: "/" })}
-						className="font-semibold flex items-center gap-2 hover:opacity-80 transition-opacity text-theme-accent-primary"
+						className="font-semibold flex items-center gap-2 hover:opacity-80 transition-opacity text-accent-primary"
 					>
 						← Back to Recent Tracks
 					</button>
 					<ThemeController />
 				</div>
 
-				<div className="rounded-lg p-6 mb-6 bg-theme-bg-secondary shadow-theme-md">
+				<div className="rounded-lg p-6 mb-6 bg-bg-secondary shadow-theme-md">
 					<div className="flex items-start space-x-6">
 						{albumImage && (
 							<img
@@ -121,17 +121,17 @@ export default function SongDetailComponent() {
 							/>
 						)}
 						<div className="flex-1 min-w-0">
-							<h1 className="text-3xl font-bold mb-2 text-theme-text-primary">
+							<h1 className="text-3xl font-bold mb-2 text-text-primary">
 								{track.name}
 							</h1>
-							<p className="text-xl mb-2 text-theme-text-secondary">
+							<p className="text-xl mb-2 text-text-secondary">
 								{track.artists.map((artist) => artist.name).join(", ")}
 							</p>
-							<p className="text-lg mb-4 text-theme-text-tertiary">
+							<p className="text-lg mb-4 text-text-tertiary">
 								{track.album.name}
 							</p>
 							<div className="flex items-center gap-4">
-								<span className="text-sm text-theme-text-tertiary">
+								<span className="text-sm text-text-tertiary">
 									Duration: {Math.floor(track.duration_ms / 60000)}:
 									{String(
 										Math.floor((track.duration_ms % 60000) / 1000),
@@ -141,7 +141,7 @@ export default function SongDetailComponent() {
 									href={track.external_urls.spotify}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="font-bold py-2 px-4 rounded text-sm transition-opacity hover:opacity-80 bg-theme-accent-primary text-theme-accent-text"
+									className="font-bold py-2 px-4 rounded text-sm transition-opacity hover:opacity-80 bg-accent-primary text-accent-text"
 								>
 									Open in Spotify
 								</a>
@@ -150,11 +150,11 @@ export default function SongDetailComponent() {
 					</div>
 				</div>
 
-				<div className="rounded-lg p-6 bg-theme-bg-secondary shadow-theme-md">
-					<h2 className="text-2xl font-bold mb-4 text-theme-text-primary">
+				<div className="rounded-lg p-6 bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-text-primary">
 						Recent Listening History
 					</h2>
-					<p className="mb-6 text-theme-text-secondary">
+					<p className="mb-6 text-text-secondary">
 						Last {trackHistory.length} time
 						{trackHistory.length !== 1 ? "s" : ""} you listened to this song
 					</p>
@@ -198,16 +198,16 @@ function HistoryItem({
 	}
 
 	return (
-		<div className="flex items-center justify-between p-4 rounded-lg transition-colors hover:opacity-95 bg-theme-bg-tertiary">
+		<div className="flex items-center justify-between p-4 rounded-lg transition-colors hover:opacity-95 bg-bg-tertiary">
 			<div className="flex items-center gap-3">
-				<div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm bg-theme-accent-primary/20 text-theme-accent-primary">
+				<div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm bg-accent-primary/20 text-accent-primary">
 					{index + 1}
 				</div>
 				<div>
-					<p className="font-medium text-theme-text-primary">
+					<p className="font-medium text-text-primary">
 						{playedAt.toLocaleDateString()} at {playedAt.toLocaleTimeString()}
 					</p>
-					<p className="text-sm text-theme-text-secondary">{timeAgo}</p>
+					<p className="text-sm text-text-secondary">{timeAgo}</p>
 				</div>
 			</div>
 		</div>

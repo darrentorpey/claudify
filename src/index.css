@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
-/* Theme System using CSS Custom Properties */
-:root {
-  /* Light theme (default) */
+@theme {
   --color-bg-primary: 249 250 251; /* gray-50 */
   --color-bg-secondary: 255 255 255; /* white */
   --color-bg-tertiary: 243 244 246; /* gray-100 */
@@ -111,7 +109,7 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
 }
 
-/* Example future theme - easily add more themes */
+/* Spotify theme */
 [data-theme="spotify"] {
   --color-bg-primary: 18 18 18;
   --color-bg-secondary: 33 33 33;

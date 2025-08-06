@@ -117,24 +117,24 @@ export default function HomeComponent() {
 
 	if (!accessToken) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-theme-bg-primary">
-				<div className="p-8 rounded-lg max-w-md w-full text-center bg-theme-bg-secondary shadow-theme-md">
-					<h1 className="text-3xl font-bold mb-6 text-theme-text-primary">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h1 className="text-3xl font-bold mb-6 text-text-primary">
 						Connect to Spotify
 					</h1>
-					<p className="mb-6 text-theme-text-secondary">
+					<p className="mb-6 text-text-secondary">
 						Connect your Spotify account to view your last 50 listened tracks
 					</p>
 					{authUrlQuery.data && (
 						<a
 							href={authUrlQuery.data}
-							className="font-bold py-3 px-6 rounded-lg inline-block transition-opacity hover:opacity-80 bg-theme-accent-primary text-theme-accent-text"
+							className="font-bold py-3 px-6 rounded-lg inline-block transition-opacity hover:opacity-80 bg-accent-primary text-accent-text"
 						>
 							Connect Spotify
 						</a>
 					)}
 					{exchangeCodeMutation.isPending && (
-						<div className="mt-4 text-theme-text-secondary">
+						<div className="mt-4 text-text-secondary">
 							Connecting...
 						</div>
 					)}
@@ -145,10 +145,10 @@ export default function HomeComponent() {
 
 	if (recentTracksQuery.isLoading) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-theme-bg-primary">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
 				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-theme-accent-primary mx-auto mb-4"></div>
-					<p className="text-theme-text-secondary">
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-accent-primary mx-auto mb-4"></div>
+					<p className="text-text-secondary">
 						Loading your listening history...
 					</p>
 				</div>
@@ -158,10 +158,10 @@ export default function HomeComponent() {
 
 	if (recentTracksQuery.error) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-theme-bg-primary">
-				<div className="p-8 rounded-lg max-w-md w-full text-center bg-theme-bg-secondary shadow-theme-md">
-					<h2 className="text-2xl font-bold mb-4 text-theme-error">Error</h2>
-					<p className="mb-4 text-theme-text-secondary">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-error">Error</h2>
+					<p className="mb-4 text-text-secondary">
 						Failed to load your listening history
 					</p>
 					<button
@@ -172,7 +172,7 @@ export default function HomeComponent() {
 							setAccessToken(null);
 							setRefreshToken(null);
 						}}
-						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-theme-text-tertiary text-theme-bg-primary"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 					>
 						Reconnect
 					</button>
@@ -184,16 +184,16 @@ export default function HomeComponent() {
 	const tracks = recentTracksQuery.data || [];
 
 	return (
-		<div className="min-h-screen bg-theme-bg-primary">
+		<div className="min-h-screen bg-bg-primary">
 			<div className="container mx-auto px-4 py-8">
-				<div className="rounded-lg p-6 px-4 mb-6 bg-theme-bg-secondary shadow-theme-md">
+				<div className="rounded-lg p-6 px-4 mb-6 bg-bg-secondary shadow-theme-md">
 					<div className="flex justify-between items-start">
 						<div>
-							<h1 className="text-3xl font-bold mb-2 text-theme-text-primary">
+							<h1 className="text-3xl font-bold mb-2 text-text-primary">
 								Your recent listening history
 							</h1>
 
-							<p className="text-theme-text-secondary">
+							<p className="text-text-secondary">
 								Your last {tracks.length} tracks from Spotify
 							</p>
 						</div>
@@ -221,7 +221,7 @@ export default function HomeComponent() {
 						setAccessToken(null);
 						setRefreshToken(null);
 					}}
-					className="font-bold py-1 px-3 rounded-lg text-sm self-end hover:opacity-80 transition-opacity bg-theme-text-tertiary text-theme-bg-primary"
+					className="font-bold py-1 px-3 rounded-lg text-sm self-end hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 				>
 					Disconnect
 				</button>
@@ -235,7 +235,7 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 	const playedAt = new Date(track.played_at).toLocaleString();
 
 	return (
-		<div className="rounded-lg p-4 transition-shadow hover:opacity-95 bg-theme-bg-secondary shadow-theme-md border border-theme-border-secondary">
+		<div className="rounded-lg p-4 transition-shadow hover:opacity-95 bg-bg-secondary shadow-theme-md border border-border-secondary">
 			<div className="flex items-center gap-4">
 				{albumImage && (
 					<img
@@ -248,29 +248,29 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 					<Link
 						to="/song/$trackId"
 						params={{ trackId: track.track.id }}
-						className="text-lg font-semibold transition-colors truncate block hover:opacity-80 text-theme-text-primary"
+						className="text-lg font-semibold transition-colors truncate block hover:opacity-80 text-text-primary"
 					>
 						{track.track.name}
 					</Link>
-					<p className="truncate text-theme-text-secondary">
+					<p className="truncate text-text-secondary">
 						{track.track.artists.map((artist) => artist.name).join(", ")}
 					</p>
-					<p className="text-sm truncate text-theme-text-tertiary">
+					<p className="text-sm truncate text-text-tertiary">
 						{track.track.album.name}
 					</p>
-					<p className="text-xs mt-1 text-theme-text-muted">
+					<p className="text-xs mt-1 text-text-muted">
 						Played at {playedAt} •
 						<a
 							href={track.track.external_urls.spotify}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="ml-1 hover:opacity-80 transition-opacity text-theme-accent-primary"
+							className="ml-1 hover:opacity-80 transition-opacity text-accent-primary"
 						>
 							Open in Spotify
 						</a>
 					</p>
 				</div>
-				<div className="text-sm text-theme-text-tertiary">
+				<div className="text-sm text-text-tertiary">
 					{Math.floor(track.track.duration_ms / 60000)}:
 					{String(
 						Math.floor((track.track.duration_ms % 60000) / 1000),

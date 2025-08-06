@@ -25,6 +25,11 @@ export default function HomeComponent() {
 			? localStorage.getItem("spotify_refresh_token")
 			: null,
 	);
+	const [tokenExpiry, setTokenExpiry] = useState<number | null>(
+		typeof window !== "undefined"
+			? parseInt(localStorage.getItem("spotify_token_expiry") || "0") || null
+			: null,
+	);
 
 	const authUrlQuery = trpc.getAuthUrl.useQuery();
 	const exchangeCodeMutation = trpc.exchangeCodeForToken.useMutation();
@@ -45,6 +50,11 @@ export default function HomeComponent() {
 							"spotify_access_token",
 							tokenResponse.access_token,
 						);
+
+						// Calculate and store token expiry time (5 minutes before actual expiry for buffer)
+						const expiryTime = Date.now() + (tokenResponse.expires_in - 300) * 1000;
+						setTokenExpiry(expiryTime);
+						localStorage.setItem("spotify_token_expiry", expiryTime.toString());
 
 						if (tokenResponse.refresh_token) {
 							setRefreshToken(tokenResponse.refresh_token);
@@ -93,6 +103,11 @@ export default function HomeComponent() {
 								newTokenResponse.access_token,
 							);
 
+							// Update token expiry time (5 minutes before actual expiry for buffer)
+							const expiryTime = Date.now() + (newTokenResponse.expires_in - 300) * 1000;
+							setTokenExpiry(expiryTime);
+							localStorage.setItem("spotify_token_expiry", expiryTime.toString());
+
 							if (newTokenResponse.refresh_token) {
 								setRefreshToken(newTokenResponse.refresh_token);
 								localStorage.setItem(
@@ -106,14 +121,67 @@ export default function HomeComponent() {
 							// Clear tokens and force re-authentication
 							localStorage.removeItem("spotify_access_token");
 							localStorage.removeItem("spotify_refresh_token");
+							localStorage.removeItem("spotify_token_expiry");
 							setAccessToken(null);
 							setRefreshToken(null);
+							setTokenExpiry(null);
 						},
 					},
 				);
 			}
 		}
-	}, [recentTracksQuery.error, refreshToken]);
+	}, [recentTracksQuery.error, refreshToken, refreshTokenMutation.isPending, refreshTokenMutation.isError, refreshTokenMutation.mutate]);
+
+	// Proactive token refresh - check expiry every 30 seconds
+	useEffect(() => {
+		if (!accessToken || !refreshToken || !tokenExpiry) return;
+
+		const checkTokenExpiry = () => {
+			const now = Date.now();
+			// Refresh if token expires in the next 5 minutes or has already expired
+			if (now >= tokenExpiry && !refreshTokenMutation.isPending) {
+				console.log("🔄 Token expiring soon, proactively refreshing...");
+				refreshTokenMutation.mutate(
+					{ refreshToken },
+					{
+						onSuccess: (newTokenResponse) => {
+							console.log("✅ Proactive token refresh successful");
+							setAccessToken(newTokenResponse.access_token);
+							localStorage.setItem(
+								"spotify_access_token",
+								newTokenResponse.access_token,
+							);
+
+							// Update token expiry time (5 minutes before actual expiry for buffer)
+							const expiryTime = Date.now() + (newTokenResponse.expires_in - 300) * 1000;
+							setTokenExpiry(expiryTime);
+							localStorage.setItem("spotify_token_expiry", expiryTime.toString());
+
+							if (newTokenResponse.refresh_token) {
+								setRefreshToken(newTokenResponse.refresh_token);
+								localStorage.setItem(
+									"spotify_refresh_token",
+									newTokenResponse.refresh_token,
+								);
+							}
+						},
+						onError: (error) => {
+							console.error("❌ Proactive token refresh failed:", error);
+							// Don't clear tokens immediately - let the reactive refresh handle it
+						},
+					},
+				);
+			}
+		};
+
+		// Check immediately
+		checkTokenExpiry();
+
+		// Set up interval to check every 30 seconds
+		const interval = setInterval(checkTokenExpiry, 30000);
+
+		return () => clearInterval(interval);
+	}, [accessToken, refreshToken, tokenExpiry, refreshTokenMutation.isPending, refreshTokenMutation.mutate]);
 
 	if (!accessToken) {
 		return (
@@ -165,8 +233,10 @@ export default function HomeComponent() {
 						onClick={() => {
 							localStorage.removeItem("spotify_access_token");
 							localStorage.removeItem("spotify_refresh_token");
+							localStorage.removeItem("spotify_token_expiry");
 							setAccessToken(null);
 							setRefreshToken(null);
+							setTokenExpiry(null);
 						}}
 						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 					>
@@ -214,8 +284,10 @@ export default function HomeComponent() {
 					onClick={() => {
 						localStorage.removeItem("spotify_access_token");
 						localStorage.removeItem("spotify_refresh_token");
+						localStorage.removeItem("spotify_token_expiry");
 						setAccessToken(null);
 						setRefreshToken(null);
+						setTokenExpiry(null);
 					}}
 					className="font-bold py-1 px-3 rounded-lg text-sm self-end hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 				>

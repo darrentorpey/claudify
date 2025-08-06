@@ -137,7 +137,7 @@ export default function SongDetailComponent() {
 									href={track.external_urls.spotify}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="font-bold py-2 px-4 rounded text-sm transition-opacity hover:opacity-80 bg-accent-primary text-accent"
+									className="font-bold py-2 px-4 rounded text-sm transition-opacity hover:opacity-80 bg-accent-primary text-black"
 								>
 									Open in Spotify
 								</a>
@@ -146,25 +146,35 @@ export default function SongDetailComponent() {
 					</div>
 				</div>
 
-				<div className="rounded-lg p-6 bg-white shadow-theme-md">
-					<h2 className="text-2xl font-bold mb-4 text-primary">
-						Recent Listening History
-					</h2>
-					<p className="mb-6 text-secondary">
-						Last {trackHistory.length} time
-						{trackHistory.length !== 1 ? "s" : ""} you listened to this song
-					</p>
+				<ListeningHistory trackHistory={trackHistory} />
+			</div>
+		</div>
+	);
+}
 
-					<div className="space-y-4">
-						{trackHistory.map((item: SpotifyRecentTrack, index: number) => (
-							<HistoryItem
-								key={`${item.played_at}-${index}`}
-								item={item}
-								index={index}
-							/>
-						))}
-					</div>
-				</div>
+function ListeningHistory({
+	trackHistory,
+}: {
+	trackHistory: SpotifyRecentTrack[];
+}) {
+	return (
+		<div className="rounded-lg p-6 bg-white shadow-theme-md">
+			<h2 className="text-2xl font-bold mb-4 text-primary">
+				Recent Listening History
+			</h2>
+			<p className="mb-6 text-secondary">
+				Last {trackHistory.length} time
+				{trackHistory.length !== 1 ? "s" : ""} you listened to this song
+			</p>
+
+			<div className="space-y-4">
+				{trackHistory.map((item: SpotifyRecentTrack, index: number) => (
+					<HistoryItem
+						key={`${item.played_at}-${index}`}
+						item={item}
+						index={index}
+					/>
+				))}
 			</div>
 		</div>
 	);

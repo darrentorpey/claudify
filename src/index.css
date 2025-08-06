@@ -12,19 +12,34 @@
 }
 
 /* Light theme (default) */
-:root,
+:root:not([data-theme]),
 :root[data-theme="light"] {
   --color-white: rgb(255 255 255); /* white */
   --color-black: rgb(17 24 39); /* gray-900 */
   --color-primary: rgb(17 24 39); /* gray-900 */
   --color-secondary: rgb(75 85 99); /* gray-600 */
-  --color-accent: rgb(34 197 94); /* green-500 */
-  --color-accent-primary: rgb(130 215 196); /* Spotify green */
+  --color-accent: rgb(139, 144, 151);
+  --color-accent-primary: rgb(139, 144, 151);
   --color-error: rgb(239 68 68); /* red-500 */
   --color-border: rgb(209 213 219); /* gray-300 */
 }
 
 /* Dark theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]),
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --color-white: rgb(31 41 55); /* gray-800 */
+    --color-black: rgb(249 250 251); /* gray-50 */
+    --color-primary: rgb(249 250 251); /* gray-50 */
+    --color-secondary: rgb(209 213 219); /* gray-300 */
+    --color-accent: rgb(148, 169, 200);
+    --color-accent-primary: rgb(148, 169, 200);
+    --color-error: rgb(248 113 113); /* red-400 */
+    --color-border: rgb(75 85 99); /* gray-600 */
+  }
+}
+
 :root[data-theme="dark"] {
   color-scheme: dark;
   --color-white: rgb(31 41 55); /* gray-800 */

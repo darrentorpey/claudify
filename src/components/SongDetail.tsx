@@ -1,32 +1,36 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { trpc } from "../lib/trpc-client";
 import type { SpotifyRecentTrack } from "../lib/spotify";
+import { trpc } from "../lib/trpc-client";
+import { ThemeController } from "./ThemeController";
 
 export default function SongDetailComponent() {
 	const navigate = useNavigate();
 	const { trackId } = useParams({ from: "/song/$trackId" });
-	
-	const accessToken = typeof window !== "undefined"
-		? localStorage.getItem("spotify_access_token")
-		: null;
+
+	const accessToken =
+		typeof window !== "undefined"
+			? localStorage.getItem("spotify_access_token")
+			: null;
 
 	const trackHistoryQuery = trpc.getTrackHistory.useQuery(
 		{ accessToken: accessToken!, trackId },
-		{ enabled: !!accessToken && !!trackId }
+		{ enabled: !!accessToken && !!trackId },
 	);
 
 	if (!accessToken) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-				<div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-					<h2 className="text-2xl font-bold mb-4 text-red-600">Access Required</h2>
-					<p className="text-gray-600 mb-4">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-error">
+						Access Required
+					</h2>
+					<p className="mb-4 text-text-secondary">
 						Please connect your Spotify account to view song details
 					</p>
 					<button
 						type="button"
 						onClick={() => navigate({ to: "/" })}
-						className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-accent-primary text-accent-text"
 					>
 						Go Back Home
 					</button>
@@ -37,10 +41,10 @@ export default function SongDetailComponent() {
 
 	if (trackHistoryQuery.isLoading) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
 				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
-					<p className="text-gray-600">Loading song history...</p>
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-accent-primary mx-auto mb-4"></div>
+					<p className="text-text-secondary">Loading song history...</p>
 				</div>
 			</div>
 		);
@@ -48,16 +52,16 @@ export default function SongDetailComponent() {
 
 	if (trackHistoryQuery.error) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-				<div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-					<h2 className="text-2xl font-bold mb-4 text-red-600">Error</h2>
-					<p className="text-gray-600 mb-4">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-error">Error</h2>
+					<p className="mb-4 text-text-secondary">
 						Failed to load song history
 					</p>
 					<button
 						type="button"
 						onClick={() => navigate({ to: "/" })}
-						className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 					>
 						Go Back Home
 					</button>
@@ -71,16 +75,18 @@ export default function SongDetailComponent() {
 
 	if (!track) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-				<div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-					<h2 className="text-2xl font-bold mb-4 text-gray-600">No History Found</h2>
-					<p className="text-gray-600 mb-4">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-text-secondary">
+						No History Found
+					</h2>
+					<p className="mb-4 text-text-secondary">
 						No listening history found for this song
 					</p>
 					<button
 						type="button"
 						onClick={() => navigate({ to: "/" })}
-						className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 					>
 						Go Back Home
 					</button>
@@ -92,17 +98,20 @@ export default function SongDetailComponent() {
 	const albumImage = track.album.images?.[0]?.url;
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="min-h-screen bg-bg-primary">
 			<div className="container mx-auto px-4 py-8">
-				<button
-					type="button"
-					onClick={() => navigate({ to: "/" })}
-					className="mb-6 text-green-600 hover:text-green-800 font-semibold flex items-center gap-2"
-				>
-					← Back to Recent Tracks
-				</button>
+				<div className="flex justify-between items-center mb-6">
+					<button
+						type="button"
+						onClick={() => navigate({ to: "/" })}
+						className="font-semibold flex items-center gap-2 hover:opacity-80 transition-opacity text-accent-primary"
+					>
+						← Back to Recent Tracks
+					</button>
+					<ThemeController />
+				</div>
 
-				<div className="bg-white rounded-lg shadow-md p-6 mb-6">
+				<div className="rounded-lg p-6 mb-6 bg-bg-secondary shadow-theme-md">
 					<div className="flex items-start space-x-6">
 						{albumImage && (
 							<img
@@ -112,17 +121,17 @@ export default function SongDetailComponent() {
 							/>
 						)}
 						<div className="flex-1 min-w-0">
-							<h1 className="text-3xl font-bold mb-2 text-gray-900">
+							<h1 className="text-3xl font-bold mb-2 text-text-primary">
 								{track.name}
 							</h1>
-							<p className="text-xl text-gray-600 mb-2">
+							<p className="text-xl mb-2 text-text-secondary">
 								{track.artists.map((artist) => artist.name).join(", ")}
 							</p>
-							<p className="text-lg text-gray-500 mb-4">
+							<p className="text-lg mb-4 text-text-tertiary">
 								{track.album.name}
 							</p>
 							<div className="flex items-center gap-4">
-								<span className="text-sm text-gray-500">
+								<span className="text-sm text-text-tertiary">
 									Duration: {Math.floor(track.duration_ms / 60000)}:
 									{String(
 										Math.floor((track.duration_ms % 60000) / 1000),
@@ -132,7 +141,7 @@ export default function SongDetailComponent() {
 									href={track.external_urls.spotify}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-sm transition-colors"
+									className="font-bold py-2 px-4 rounded text-sm transition-opacity hover:opacity-80 bg-accent-primary text-accent-text"
 								>
 									Open in Spotify
 								</a>
@@ -141,14 +150,15 @@ export default function SongDetailComponent() {
 					</div>
 				</div>
 
-				<div className="bg-white rounded-lg shadow-md p-6">
-					<h2 className="text-2xl font-bold mb-4 text-gray-900">
+				<div className="rounded-lg p-6 bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-text-primary">
 						Recent Listening History
 					</h2>
-					<p className="text-gray-600 mb-6">
-						Last {trackHistory.length} time{trackHistory.length !== 1 ? 's' : ''} you listened to this song
+					<p className="mb-6 text-text-secondary">
+						Last {trackHistory.length} time
+						{trackHistory.length !== 1 ? "s" : ""} you listened to this song
 					</p>
-					
+
 					<div className="space-y-4">
 						{trackHistory.map((item: SpotifyRecentTrack, index: number) => (
 							<HistoryItem
@@ -164,34 +174,40 @@ export default function SongDetailComponent() {
 	);
 }
 
-function HistoryItem({ item, index }: { item: SpotifyRecentTrack; index: number }) {
+function HistoryItem({
+	item,
+	index,
+}: {
+	item: SpotifyRecentTrack;
+	index: number;
+}) {
 	const playedAt = new Date(item.played_at);
 	const now = new Date();
 	const diffInMs = now.getTime() - playedAt.getTime();
 	const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
 	const diffInDays = Math.floor(diffInHours / 24);
-	
+
 	let timeAgo = "";
 	if (diffInDays > 0) {
-		timeAgo = `${diffInDays} day${diffInDays !== 1 ? 's' : ''} ago`;
+		timeAgo = `${diffInDays} day${diffInDays !== 1 ? "s" : ""} ago`;
 	} else if (diffInHours > 0) {
-		timeAgo = `${diffInHours} hour${diffInHours !== 1 ? 's' : ''} ago`;
+		timeAgo = `${diffInHours} hour${diffInHours !== 1 ? "s" : ""} ago`;
 	} else {
 		const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
-		timeAgo = `${Math.max(1, diffInMinutes)} minute${diffInMinutes !== 1 ? 's' : ''} ago`;
+		timeAgo = `${Math.max(1, diffInMinutes)} minute${diffInMinutes !== 1 ? "s" : ""} ago`;
 	}
 
 	return (
-		<div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-			<div className="flex items-center space-x-4">
-				<div className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center font-semibold text-sm">
+		<div className="flex items-center justify-between p-4 rounded-lg transition-colors hover:opacity-95 bg-bg-tertiary">
+			<div className="flex items-center gap-3">
+				<div className="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-sm bg-accent-primary/20 text-accent-primary">
 					{index + 1}
 				</div>
 				<div>
-					<p className="font-medium text-gray-900">
+					<p className="font-medium text-text-primary">
 						{playedAt.toLocaleDateString()} at {playedAt.toLocaleTimeString()}
 					</p>
-					<p className="text-sm text-gray-600">{timeAgo}</p>
+					<p className="text-sm text-text-secondary">{timeAgo}</p>
 				</div>
 			</div>
 		</div>

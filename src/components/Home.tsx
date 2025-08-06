@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import type { SpotifyRecentTrack } from "../lib/spotify";
 import { trpc } from "../lib/trpc-client";
+import { ThemeController } from "./ThemeController";
 
 export default function HomeComponent() {
 	const [code, setCode] = useState<string | null>(null);
@@ -116,24 +117,26 @@ export default function HomeComponent() {
 
 	if (!accessToken) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-				<div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-					<h1 className="text-3xl font-bold mb-6 text-gray-900">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h1 className="text-3xl font-bold mb-6 text-text-primary">
 						Connect to Spotify
 					</h1>
-					<p className="text-gray-600 mb-6">
+					<p className="mb-6 text-text-secondary">
 						Connect your Spotify account to view your last 50 listened tracks
 					</p>
 					{authUrlQuery.data && (
 						<a
 							href={authUrlQuery.data}
-							className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg inline-block transition-colors"
+							className="font-bold py-3 px-6 rounded-lg inline-block transition-opacity hover:opacity-80 bg-accent-primary text-accent-text"
 						>
 							Connect Spotify
 						</a>
 					)}
 					{exchangeCodeMutation.isPending && (
-						<div className="mt-4 text-gray-600">Connecting...</div>
+						<div className="mt-4 text-text-secondary">
+							Connecting...
+						</div>
 					)}
 				</div>
 			</div>
@@ -142,10 +145,12 @@ export default function HomeComponent() {
 
 	if (recentTracksQuery.isLoading) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
 				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
-					<p className="text-gray-600">Loading your listening history...</p>
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-b-accent-primary mx-auto mb-4"></div>
+					<p className="text-text-secondary">
+						Loading your listening history...
+					</p>
 				</div>
 			</div>
 		);
@@ -153,10 +158,10 @@ export default function HomeComponent() {
 
 	if (recentTracksQuery.error) {
 		return (
-			<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-				<div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-					<h2 className="text-2xl font-bold mb-4 text-red-600">Error</h2>
-					<p className="text-gray-600 mb-4">
+			<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+				<div className="p-8 rounded-lg max-w-md w-full text-center bg-bg-secondary shadow-theme-md">
+					<h2 className="text-2xl font-bold mb-4 text-error">Error</h2>
+					<p className="mb-4 text-text-secondary">
 						Failed to load your listening history
 					</p>
 					<button
@@ -167,7 +172,7 @@ export default function HomeComponent() {
 							setAccessToken(null);
 							setRefreshToken(null);
 						}}
-						className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+						className="font-bold py-2 px-4 rounded hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
 					>
 						Reconnect
 					</button>
@@ -179,27 +184,22 @@ export default function HomeComponent() {
 	const tracks = recentTracksQuery.data || [];
 
 	return (
-		<div className="min-h-screen bg-gray-50">
+		<div className="min-h-screen bg-bg-primary">
 			<div className="container mx-auto px-4 py-8">
-				<div className="bg-white rounded-lg shadow-md p-6 mb-6">
-					<h1 className="text-3xl font-bold mb-2 text-gray-900">
-						Your Recent Listening History
-					</h1>
-					<p className="text-gray-600">
-						Your last {tracks.length} tracks from Spotify
-					</p>
-					<button
-						type="button"
-						onClick={() => {
-							localStorage.removeItem("spotify_access_token");
-							localStorage.removeItem("spotify_refresh_token");
-							setAccessToken(null);
-							setRefreshToken(null);
-						}}
-						className="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-sm"
-					>
-						Disconnect
-					</button>
+				<div className="rounded-lg p-6 px-4 mb-6 bg-bg-secondary shadow-theme-md">
+					<div className="flex justify-between items-start">
+						<div>
+							<h1 className="text-3xl font-bold mb-2 text-text-primary">
+								Your recent listening history
+							</h1>
+
+							<p className="text-text-secondary">
+								Your last {tracks.length} tracks from Spotify
+							</p>
+						</div>
+
+						<ThemeController />
+					</div>
 				</div>
 
 				<div className="grid gap-4">
@@ -211,6 +211,21 @@ export default function HomeComponent() {
 					))}
 				</div>
 			</div>
+
+			<div className="flex flex-col items-center gap-4 fixed bottom-8 right-8">
+				<button
+					type="button"
+					onClick={() => {
+						localStorage.removeItem("spotify_access_token");
+						localStorage.removeItem("spotify_refresh_token");
+						setAccessToken(null);
+						setRefreshToken(null);
+					}}
+					className="font-bold py-1 px-3 rounded-lg text-sm self-end hover:opacity-80 transition-opacity bg-text-tertiary text-bg-primary"
+				>
+					Disconnect
+				</button>
+			</div>
 		</div>
 	);
 }
@@ -220,8 +235,8 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 	const playedAt = new Date(track.played_at).toLocaleString();
 
 	return (
-		<div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
-			<div className="flex items-center space-x-4">
+		<div className="rounded-lg p-4 transition-shadow hover:opacity-95 bg-bg-secondary shadow-theme-md border border-border-secondary">
+			<div className="flex items-center gap-4">
 				{albumImage && (
 					<img
 						src={albumImage}
@@ -233,29 +248,29 @@ function TrackCard({ track }: { track: SpotifyRecentTrack }) {
 					<Link
 						to="/song/$trackId"
 						params={{ trackId: track.track.id }}
-						className="text-lg font-semibold text-gray-900 hover:text-green-600 transition-colors truncate block"
+						className="text-lg font-semibold transition-colors truncate block hover:opacity-80 text-text-primary"
 					>
 						{track.track.name}
 					</Link>
-					<p className="text-gray-600 truncate">
+					<p className="truncate text-text-secondary">
 						{track.track.artists.map((artist) => artist.name).join(", ")}
 					</p>
-					<p className="text-sm text-gray-500 truncate">
+					<p className="text-sm truncate text-text-tertiary">
 						{track.track.album.name}
 					</p>
-					<p className="text-xs text-gray-400 mt-1">
+					<p className="text-xs mt-1 text-text-muted">
 						Played at {playedAt} •
 						<a
 							href={track.track.external_urls.spotify}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="text-green-600 hover:text-green-800 ml-1"
+							className="ml-1 hover:opacity-80 transition-opacity text-accent-primary"
 						>
 							Open in Spotify
 						</a>
 					</p>
 				</div>
-				<div className="text-sm text-gray-500">
+				<div className="text-sm text-text-tertiary">
 					{Math.floor(track.track.duration_ms / 60000)}:
 					{String(
 						Math.floor((track.track.duration_ms % 60000) / 1000),

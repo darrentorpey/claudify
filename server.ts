@@ -10,29 +10,39 @@ import { appRouter } from "./src/server/router";
 const app = express();
 const port = process.env.PORT || 3001;
 
-// Configure CORS to prevent unauthorized websites from making requests to our API
-app.use(
-	cors({
-		origin: (origin, callback) => {
-			// Allow requests with no origin (like mobile apps or curl requests)
-			if (!origin) return callback(null, true);
+// Configure CORS for development with explicit credential handling
+app.use((req, res, next) => {
+	const origin = req.headers.origin;
+	const allowedOrigins = [
+		"http://localhost:5173",
+		"http://localhost:5174",
+		"http://localhost:3000",
+	];
 
-			const allowedOrigins = [
-				"http://localhost:5173",
-				"http://localhost:5174",
-				"http://localhost:3000",
-			];
-			if (allowedOrigins.includes(origin)) {
-				return callback(null, true);
-			}
+	if (!origin || allowedOrigins.includes(origin)) {
+		res.header("Access-Control-Allow-Origin", origin || "*");
+		res.header("Access-Control-Allow-Credentials", "true");
+		res.header(
+			"Access-Control-Allow-Methods",
+			"GET, POST, PUT, DELETE, OPTIONS",
+		);
+		res.header(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization, x-trpc-source, x-requested-with",
+		);
+		res.header("Access-Control-Expose-Headers", "Content-Length, Content-Type");
 
-			callback(new Error("Not allowed by CORS"));
-		},
-		credentials: true,
-		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-		allowedHeaders: ["Content-Type", "Authorization", "x-trpc-source"],
-	}),
-);
+		if (req.method === "OPTIONS") {
+			console.log("🔄 Handling OPTIONS preflight from:", origin);
+			return res.sendStatus(200);
+		}
+	}
+
+	next();
+});
+
+// Remove explicit OPTIONS handler since cors() should handle it
+
 app.use(express.json());
 
 // Request logging middleware for development

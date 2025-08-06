@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Claudify - Spotify Listening History</title>
+    <script>
+      // Initialize theme before any rendering to prevent flash
+      (function() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme && savedTheme !== 'system') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

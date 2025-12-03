@@ -1,66 +1,239 @@
+@layer theme, base, components, utilities;
 @import "tailwindcss";
 
-@theme {
-  --color-white: white;
-  --color-black: black;
-  --color-primary: black;
-  --color-secondary: white;
-  --color-accent-secondary: gray;
-  --color-accent-primary: orange;
-  --color-error: red;
-  --color-border: gray;
-}
-
-/* Light theme (default) */
-:root:not([data-theme]),
-:root[data-theme="light"] {
-  --color-white: rgb(255 255 255); /* white */
-  --color-black: rgb(17 24 39); /* gray-900 */
-  --color-primary: rgb(17 24 39); /* gray-900 */
-  --color-secondary: rgb(75 85 99); /* gray-600 */
-  --color-accent-primary: rgb(139, 144, 151);
-  --color-accent-secondary: rgb(139, 144, 151);
-  --color-error: rgb(239 68 68); /* red-500 */
-  --color-border: rgb(209 213 219); /* gray-300 */
-}
-
-/* Dark theme */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]),
-  :root[data-theme="dark"] {
-    color-scheme: dark;
-    --color-white: rgb(31 41 55); /* gray-800 */
-    --color-black: rgb(249 250 251); /* gray-50 */
-    --color-primary: rgb(249 250 251); /* gray-50 */
-    --color-secondary: rgb(209 213 219); /* gray-300 */
-    --color-accent-primary: rgb(148, 169, 200);
-    --color-accent-secondary: rgb(148, 169, 200);
-    --color-error: rgb(248 113 113); /* red-400 */
-    --color-border: rgb(75 85 99); /* gray-600 */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
+}
+
+@theme {
+  /* Base colors */
+  --color-white: hsl(0, 0%, 100%);
+  --color-white-no-theme: hsl(0, 0%, 100%);
+  --color-black: hsl(0, 0%, 13%);
+  --color-black-dark: hsl(0, 0%, 0%);
+  --color-black-light: hsl(0, 0%, 27%);
+
+  /* Gray scale - improved contrast hierarchy */
+  --color-gray-dark-3: hsl(236, 6%, 27%); /* Darkest - WCAG AAA on white */
+  --color-gray-dark-2: hsl(236, 6%, 39%); /* Dark - WCAG AA on white */
+  --color-gray-dark-1: hsl(236, 6%, 48%); /* Medium - borderline contrast */
+  --color-gray-primary: hsl(231, 8%, 29%); /* Primary text - WCAG AAA */
+  --color-gray-secondary: hsl(236, 6%, 39%); /* Secondary text - WCAG AA (4.8:1) */
+  --color-gray-muted: hsl(229, 9%, 54%); /* Muted text - WCAG AA (4.5:1) */
+  --color-gray-light-1: hsl(229, 9%, 44%); /* Deprecated - use gray-muted */
+  --color-gray-light-2: hsl(228, 33%, 85%); /* Light backgrounds & subtle borders */
+  --color-gray-light-3: hsl(240, 25%, 98%); /* Lightest backgrounds */
+
+  /* Border colors - semantic naming */
+  --color-border-subtle: hsl(228, 33%, 92%); /* Very subtle dividers */
+  --color-border-default: hsl(228, 33%, 85%); /* Standard borders */
+  --color-border-medium: hsl(236, 6%, 75%); /* Medium emphasis borders */
+  --color-border-strong: hsl(236, 6%, 48%); /* Strong emphasis borders */
+
+  /* Background states for interactivity */
+  --color-bg-hover: hsl(228, 33%, 96%); /* Hover state backgrounds */
+  --color-bg-active: hsl(228, 33%, 92%); /* Active/pressed backgrounds */
+  --color-bg-selected: hsl(130, 60%, 95%); /* Selected state backgrounds */
+
+  /* Core brand colors */
+  --color-primary: hsl(231, 8%, 29%);
+  --color-secondary: hsl(236, 6%, 39%);
+  --color-accent-primary: hsl(25, 95%, 53%); /* Orange accent */
+  --color-accent-secondary: hsl(25, 95%, 53%);
+  --color-accent-hover: hsl(25, 95%, 48%); /* Darker on hover */
+  --color-error: hsl(0, 84%, 60%);
+  --color-border: hsl(228, 33%, 85%);
+
+  /* Enhanced shadows for better depth perception */
+  --shadow-elevation-card:
+    0 0 3px hsla(215, 92%, 15%, 0.09), 0 4px 8px hsla(215, 92%, 15%, 0.05), 0 6px 12px hsla(215, 92%, 15%, 0.02);
+  --shadow-elevation-hover:
+    0 0 4px hsla(215, 92%, 15%, 0.12), 0 6px 12px hsla(215, 92%, 15%, 0.08), 0 8px 16px hsla(215, 92%, 15%, 0.04);
+  --shadow-elevation-modal:
+    0 0 8px hsla(215, 92%, 15%, 0.15), 0 12px 24px hsla(215, 92%, 15%, 0.12), 0 16px 32px hsla(215, 92%, 15%, 0.08);
+
+  /* Text sizing */
+  --text-tiny: 0.625rem;
+  --text-sm: 0.875rem;
+
+  /* Border radius scale */
+  --border-radius-sm: 0.375rem;
+  --border-radius-lg: 0.6rem;
+
+  /* Z-Index Scale - Systematic layering system */
+  --z-index-base: 0;
+  --z-index-above: 1;
+  --z-index-sticky: 10;
+  --z-index-floating: 100;
+  --z-index-overlay: 1000;
+  --z-index-modal: 2000;
+  --z-index-tooltip: 3000;
+}
+
+:root {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* Base colors inverted */
+    --color-white: hsl(0, 0%, 13%);
+    --color-black: hsl(0, 0%, 90%);
+    --color-black-dark: hsl(0, 0%, 100%);
+    --color-black-light: hsl(228, 33%, 96%);
+
+    /* Gray scale - improved dark mode contrast */
+    --color-gray-dark-3: hsl(0, 0%, 60%); /* Darkest text - AAA on dark bg */
+    --color-gray-dark-2: hsl(0, 0%, 73%); /* Dark text - AA on dark bg */
+    --color-gray-dark-1: hsl(0, 0%, 80%); /* Medium text */
+    --color-gray-primary: hsl(0, 0%, 67%); /* Primary dark mode text */
+    --color-gray-secondary: hsl(0, 0%, 73%); /* Secondary text - AA contrast */
+    --color-gray-muted: hsl(0, 0%, 60%); /* Muted text - AA contrast */
+    --color-gray-light-1: hsl(0, 0%, 53%); /* Deprecated */
+    --color-gray-light-2: hsl(0, 0%, 25%); /* Dark backgrounds & borders */
+    --color-gray-light-3: hsl(0, 0%, 18%); /* Darkest backgrounds */
+
+    /* Border colors - dark mode */
+    --color-border-subtle: hsl(0, 0%, 20%); /* Very subtle dividers */
+    --color-border-default: hsl(0, 0%, 25%); /* Standard borders */
+    --color-border-medium: hsl(0, 0%, 35%); /* Medium emphasis borders */
+    --color-border-strong: hsl(0, 0%, 53%); /* Strong emphasis borders */
+
+    /* Background states - dark mode */
+    --color-bg-hover: hsl(0, 0%, 20%); /* Hover state backgrounds */
+    --color-bg-active: hsl(0, 0%, 25%); /* Active/pressed backgrounds */
+    --color-bg-selected: hsl(130, 60%, 15%); /* Selected state backgrounds */
+
+    /* Core brand colors - dark mode adjustments */
+    --color-primary: hsl(0, 0%, 67%);
+    --color-secondary: hsl(0, 0%, 73%);
+    --color-accent-primary: hsl(25, 95%, 58%); /* Brighter orange for dark mode */
+    --color-accent-secondary: hsl(25, 95%, 58%);
+    --color-accent-hover: hsl(25, 95%, 63%); /* Even brighter on hover */
+    --color-error: hsl(0, 84%, 70%);
+    --color-border: hsl(0, 0%, 25%);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-white: rgb(31 41 55); /* gray-800 */
-  --color-black: rgb(249 250 251); /* gray-50 */
-  --color-primary: rgb(249 250 251); /* gray-50 */
-  --color-secondary: rgb(209 213 219); /* gray-300 */
-  --color-accent-primary: rgb(148, 169, 200);
-  --color-accent-secondary: rgb(148, 169, 200);
-  --color-error: rgb(248 113 113); /* red-400 */
-  --color-border: rgb(75 85 99); /* gray-600 */
+
+  /* Base colors inverted */
+  --color-white: hsl(0, 0%, 13%);
+  --color-black: hsl(0, 0%, 90%);
+  --color-black-dark: hsl(0, 0%, 100%);
+  --color-black-light: hsl(228, 33%, 96%);
+
+  /* Gray scale - improved dark mode contrast */
+  --color-gray-dark-3: hsl(0, 0%, 60%);
+  --color-gray-dark-2: hsl(0, 0%, 73%);
+  --color-gray-dark-1: hsl(0, 0%, 80%);
+  --color-gray-primary: hsl(0, 0%, 67%);
+  --color-gray-secondary: hsl(0, 0%, 73%);
+  --color-gray-muted: hsl(0, 0%, 60%);
+  --color-gray-light-1: hsl(0, 0%, 53%);
+  --color-gray-light-2: hsl(0, 0%, 25%);
+  --color-gray-light-3: hsl(0, 0%, 18%);
+
+  /* Border colors - dark mode */
+  --color-border-subtle: hsl(0, 0%, 20%);
+  --color-border-default: hsl(0, 0%, 25%);
+  --color-border-medium: hsl(0, 0%, 35%);
+  --color-border-strong: hsl(0, 0%, 53%);
+
+  /* Background states - dark mode */
+  --color-bg-hover: hsl(0, 0%, 20%);
+  --color-bg-active: hsl(0, 0%, 25%);
+  --color-bg-selected: hsl(130, 60%, 15%);
+
+  /* Core brand colors - dark mode adjustments */
+  --color-primary: hsl(0, 0%, 67%);
+  --color-secondary: hsl(0, 0%, 73%);
+  --color-accent-primary: hsl(25, 95%, 58%);
+  --color-accent-secondary: hsl(25, 95%, 58%);
+  --color-accent-hover: hsl(25, 95%, 63%);
+  --color-error: hsl(0, 84%, 70%);
+  --color-border: hsl(0, 0%, 25%);
 }
 
 /* Spotify theme */
 :root[data-theme="spotify"] {
   color-scheme: dark;
-  --color-white: rgb(18 18 18); /* Spotify dark background */
-  --color-black: rgb(193, 193, 193); /* white text */
-  --color-primary: rgb(255 255 255); /* white text */
-  --color-secondary: rgb(179 179 179); /* readable gray text */
-  --color-accent-primary: rgb(30 215 96); /* Spotify green */
-  --color-accent-secondary: rgb(30 215 96); /* Spotify green */
-  --color-error: rgb(248 113 113); /* red-400 */
-  --color-border: rgb(55 55 55); /* Spotify border gray */
+
+  /* Spotify dark background */
+  --color-white: hsl(0, 0%, 7%);
+  --color-black: hsl(0, 0%, 76%);
+  --color-black-dark: hsl(0, 0%, 100%);
+  --color-black-light: hsl(0, 0%, 90%);
+
+  /* Spotify gray scale */
+  --color-gray-dark-3: hsl(0, 0%, 80%);
+  --color-gray-dark-2: hsl(0, 0%, 73%);
+  --color-gray-dark-1: hsl(0, 0%, 67%);
+  --color-gray-primary: hsl(0, 0%, 76%);
+  --color-gray-secondary: hsl(0, 0%, 70%);
+  --color-gray-muted: hsl(0, 0%, 60%);
+  --color-gray-light-1: hsl(0, 0%, 53%);
+  --color-gray-light-2: hsl(0, 0%, 22%);
+  --color-gray-light-3: hsl(0, 0%, 11%);
+
+  /* Spotify borders */
+  --color-border-subtle: hsl(0, 0%, 18%);
+  --color-border-default: hsl(0, 0%, 22%);
+  --color-border-medium: hsl(0, 0%, 30%);
+  --color-border-strong: hsl(0, 0%, 53%);
+
+  /* Spotify interaction states */
+  --color-bg-hover: hsl(0, 0%, 15%);
+  --color-bg-active: hsl(0, 0%, 20%);
+  --color-bg-selected: hsl(141, 73%, 15%);
+
+  /* Spotify brand colors */
+  --color-primary: hsl(0, 0%, 100%);
+  --color-secondary: hsl(0, 0%, 70%);
+  --color-accent-primary: hsl(141, 73%, 42%); /* Spotify green */
+  --color-accent-secondary: hsl(141, 73%, 42%);
+  --color-accent-hover: hsl(141, 73%, 46%);
+  --color-error: hsl(0, 84%, 70%);
+  --color-border: hsl(0, 0%, 22%);
+}
+
+button[disabled] {
+  opacity: 50%;
+  cursor: not-allowed;
+}
+
+@layer components {
+  .visually-hidden {
+    @apply absolute;
+    @apply left-[-9999px];
+    @apply top-[-9999px];
+    @apply w-0;
+    @apply h-0;
+    @apply overflow-hidden;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="w-full h-full overflow-y-scroll m-0 p-0 box-border min-h-screen">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Claudify - Spotify Listening History</title>
+
+    <meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#212121" media="(prefers-color-scheme: dark)" />
+
     <script>
       // Initialize theme before any rendering to prevent flash
       (function() {
@@ -14,8 +18,9 @@
       })();
     </script>
   </head>
-  <body>
-    <div id="root"></div>
+
+  <body class="m-0 w-full h-full box-border bg-white text-black antialiased">
+    <div id="root" class="h-full"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

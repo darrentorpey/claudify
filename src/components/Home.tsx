@@ -217,7 +217,7 @@ export default function HomeComponent() {
 					{authUrlQuery.data && (
 						<a
 							href={authUrlQuery.data}
-							className="font-bold py-3 px-6 rounded-lg inline-block transition-opacity hover:opacity-80 bg-accent text-white"
+							className="font-bold py-3 px-6 rounded-lg inline-block transition-opacity hover:opacity-80 bg-accent-primary text-white-no-theme"
 						>
 							Connect Spotify
 						</a>
